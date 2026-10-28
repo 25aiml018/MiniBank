@@ -1,9 +1,17 @@
 package model;
 
-// Practical 2 & Practical 3: Customer class with encapsulation, nested Address, and Cloneable
-public class Customer implements Cloneable {
+import model.annotation.Id;
+
+import java.io.Serializable;
+
+// Practical 2, 3, 11, 13: Customer class with encapsulation, nested Address, Cloneable, Serializable, and @Id
+public class Customer implements Cloneable, Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     private static long customerCounter = 100;
 
+    @Id
     private final String customerId;
     private String name;
     private String email;
@@ -51,8 +59,11 @@ public class Customer implements Cloneable {
         this.address = address;
     }
 
-    // Practical 3: Nested public static class Address
-    public static class Address {
+    // Practical 3 & 11: Nested public static class Address with Serializable
+    public static class Address implements Serializable {
+
+        private static final long serialVersionUID = 1L;
+
         private String line;
         private String city;
         private String pincode;

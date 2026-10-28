@@ -6,8 +6,12 @@ import exception.InvalidAmountException;
 import model.annotation.Id;
 import model.annotation.Positive;
 
-// Practical 2, 3, 5, 6, 7, 8, 9: Abstract Account with encapsulation, polymorphism, and synchronization
-public abstract class Account implements Transactable, InterestBearing {
+import java.io.Serializable;
+
+// Practical 2, 3, 5, 6, 7, 8, 9, 11, 12: Abstract Account with encapsulation, polymorphism, synchronization, serialization, and comparable
+public abstract class Account implements Transactable, InterestBearing, Serializable, Comparable<Account> {
+
+    private static final long serialVersionUID = 1L;
 
     private static int accountCounter = 0;
 
@@ -20,6 +24,9 @@ public abstract class Account implements Transactable, InterestBearing {
     private long balance;
 
     private boolean active;
+
+    // Practical 11 (Supplementary): Transient field that is not persisted during serialization
+    private transient String sessionToken;
 
     // Helper to auto-generate account numbers like "AC0001"
     private static synchronized String generateAccountNumber() {
@@ -90,7 +97,8 @@ public abstract class Account implements Transactable, InterestBearing {
             throw new InvalidAmountException("Withdrawal amount must be positive: " + amount);
         }
         if (!canWithdraw(amount)) {
-            long shortfall = amount - balance;
+            long available = (this instanceof SavingsAccount sa) ? Math.max(0, balance - sa.getMinBalance()) : balance;
+            long shortfall = Math.max(1, amount - available);
             throw new InsufficientFundsException("Insufficient funds! Shortfall is: " + shortfall, shortfall);
         }
         this.balance -= amount;
@@ -129,6 +137,22 @@ public abstract class Account implements Transactable, InterestBearing {
         if (!(o instanceof Account)) return false;
         Account other = (Account) o;
         return accountNumber != null && accountNumber.equals(other.accountNumber);
+    }
+
+    public String getSessionToken() {
+        return sessionToken;
+    }
+
+    public void setSessionToken(String sessionToken) {
+        this.sessionToken = sessionToken;
+    }
+
+    // Practical 12: Comparable implementation comparing account numbers
+    @Override
+    public int compareTo(Account other) {
+        if (other == null || other.accountNumber == null) return 1;
+        if (this.accountNumber == null) return -1;
+        return this.accountNumber.compareTo(other.accountNumber);
     }
 
     // Practical 3: hashCode() based on accountNumber

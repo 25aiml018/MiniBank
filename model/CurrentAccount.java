@@ -1,7 +1,9 @@
 package model;
 
-// Practical 5: CurrentAccount with overdraft limit and 0.0% interest
+// Practical 5, 11: CurrentAccount with overdraft limit and 0.0% interest
 public class CurrentAccount extends Account {
+
+    private static final long serialVersionUID = 1L;
 
     private long overdraftLimit;
 

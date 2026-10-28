@@ -20,3 +20,8 @@ bin/
 .project
 .classpath
 .settings/
+
+# Runtime data files
+data/
+logs/
+reports/

@@ -1,7 +1,9 @@
 package model;
 
-// Practical 5: SavingsAccount with minimum balance and 4.0% interest
+// Practical 5, 11: SavingsAccount with minimum balance and 4.0% interest
 public class SavingsAccount extends Account {
+
+    private static final long serialVersionUID = 1L;
 
     private long minBalance;
 
